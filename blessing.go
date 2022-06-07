@@ -16,9 +16,9 @@ func main() {
 	if err := dc.LoadFontFace("../bytedance/千图小兔体.ttf", 120); err != nil {
 		panic(err)
 	}
-	var name, s, bless string
-	fmt.Println("请输入姓名，考试科目和祝福语：")
-	fmt.Scanf("%s %s %s", &name, &s, &bless)
+	var nickname, name, s, bless string
+	fmt.Println("请输入昵称、姓名、考试科目和祝福语：")
+	fmt.Scanf("%s %s %s %s", &nickname, &name, &s, &bless)
 	//name, s, bless = "豆豆", "语文", "旗开得胜！"
 	s = fmt.Sprintf("%v考试%v", s, bless)
 
@@ -76,7 +76,7 @@ func main() {
 	fmt.Printf("Send massage to %v\n", name)
 	wechat := wechat.Wechat{}
 	wechat.Login()
-	friend := wechat.Search(name)
+	friend := wechat.Search(nickname)
 	fmt.Printf("friend：%v send succeed", friend)
 
 	wechat.SendImageMessage(friend, "out.png")
