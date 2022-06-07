@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/bean0303/blessing/wechat"
 	"github.com/fogleman/gg"
 )
 
@@ -12,13 +13,13 @@ func main() {
 	dc.SetRGB(1, 0, 0)
 	dc.Clear()
 	dc.SetRGB(1, 1, 0)
-	if err := dc.LoadFontFace("/home/tianpf/bytedance/千图小兔体.ttf", 120); err != nil {
+	if err := dc.LoadFontFace("../bytedance/千图小兔体.ttf", 120); err != nil {
 		panic(err)
 	}
 	var name, s, bless string
 	fmt.Println("请输入姓名，考试科目和祝福语：")
 	fmt.Scanf("%s %s %s", &name, &s, &bless)
-
+	//name, s, bless = "豆豆", "语文", "旗开得胜！"
 	s = fmt.Sprintf("%v考试%v", s, bless)
 
 	ellipsisWidth, _ := dc.MeasureString("...")
@@ -71,7 +72,14 @@ func main() {
 	lineX := S - sWidth - 100
 	lineY += lineSpace
 	dc.DrawString(sign, lineX, lineY)
-	dc.SavePNG("out.png")
+	_ = dc.SavePNG("out.png")
+	fmt.Printf("Send massage to %v\n", name)
+	wechat := wechat.Wechat{}
+	wechat.Login()
+	friend := wechat.Search(name)
+	fmt.Printf("friend：%v send succeed", friend)
+
+	wechat.SendImageMessage(friend, "out.png")
 }
 
 func TruncateText(dc *gg.Context, originalText string, maxTextWidth float64) string {
